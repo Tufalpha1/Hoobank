@@ -2,9 +2,9 @@ const connection = require("../../database/connection");
 
 
 
-exports.addUser = async (email, password, name, address, phone, city) => {
+exports.addUser = async (email, password, name, address, phone, city, type) => {
   try {
-    let getBranchQuery = `SELECT ID FROM branch WHERE city = '${city}'`;
+    let getBranchQuery = `SELECT ID FROM branch WHERE city = '${city}';`;
     var [branchId, _] = await connection.execute(getBranchQuery);
 
     let insertCustomer = `INSERT INTO customers (email, name, address, phone_no, branch_id)
@@ -12,11 +12,21 @@ exports.addUser = async (email, password, name, address, phone, city) => {
 
     var [isCustomerAdded, _] = await connection.execute(insertCustomer);
 
+    let getCustomerID = `SELECT ID FROM customers WHERE email = '${email}';`;
+    var [customerId, _] = await connection.execute(getCustomerID);
+
+
+
     if (isCustomerAdded) {
-      let makeAccount = `INSERT INTO login (email, password, isAdmin) 
+      let makeLogin = `INSERT INTO login (email, password, isAdmin) 
                             VALUES ('${email}', '${password}', ${false})`;
 
-      var [isAccountMade, _] = await connection.execute(makeAccount);
+      var [isLoginMade, _] = await connection.execute(makeLogin);
+
+      let makeAccount = `INSERT INTO accounts (account_status, account_type, customer_id, branch_id)
+      VALUES ('active', '${type}', '${customerId[0].ID}', '${branchId[0].ID}');`;
+
+      var [accountCreated, _] = await connection.execute(makeAccount);
     }
   } catch (error) {
     console.error(error);

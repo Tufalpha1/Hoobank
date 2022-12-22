@@ -23,23 +23,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  name: "session-id",
-  secret: "Sample Cookie Parser Key",
-  saveUninitialized: false,
-  resave: false,
-  store: new FileStore({ path: "./sessions/", retries: 0 })
-}));
+//session thing
+// app.use(session({
+//   name: "session-id",
+//   secret: process.env.COOKIE_SECRET,
+//   saveUninitialized: false,
+//   resave: false,
+//   store: new FileStore({ path: "./sessions/", retries: 0 })
+// }));
 
 const corsOptions = {
-  origin: 'http://local.host:3000',  //Your Client, do not write '*'
+  origin: 'http://local.host:3000',  
   credentials: true,
 };
 app.use(cors(corsOptions));
 
+
+
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use("/api/admin", adminRouter)
+
 
 app.all("*", (req, res, next)=>{
   res.send({ msg: "Landed on a 404"})

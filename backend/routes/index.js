@@ -6,4 +6,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get("/check-session", (req, res, next) => {
+  if (req.session.user) {
+    res.send({ session: true, user: req.session.user });
+  }
+  res.send({ session: false, user: null });
+});
+
 module.exports = router;

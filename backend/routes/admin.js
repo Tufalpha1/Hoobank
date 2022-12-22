@@ -14,20 +14,11 @@ router.get("/", async(req, res, next)=>{
     }
     res.send({ success: false, result: {} })
 })
-
-router.post("/addAdmin", async(req, res, next)=>{
-    const {name} = req.body;
-
-    const result = await createAdmin(name);
-
-    if(result){
-        return res.send({success: true, result: result});
-    }
-    res.send({success: false, result: {}})
-
-})
+router.get("/check-session", (req, res, next) => {
+  if (req.session.user) {
+    res.send({ session: true, user: req.session.user });
+  }
+  res.send({ session: false, user: null });
+});
 
 module.exports =  router;
-
-
-// MODEL - VIEW - CONTROLLER

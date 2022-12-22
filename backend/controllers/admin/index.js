@@ -1,17 +1,36 @@
 const connection = require("../../database/connection");
 
-exports.getAllAdmins = async() =>{
-    let sql = 'SELECT * FROM admin';
+
+exports.getAccountInfo = async (id) =>{
+    let accountQuery = `SELECT * FROM accounts WHERE customer_id = '${id}';`;
 
     try {
-        var [result, _] = await connection.execute(sql);
-        console.log("This is other variable: ", _);
-    }
-    catch (error) {
-        console.error(error);
+      var [accountInfo, _] = await connection.execute(accountQuery);
+      console.log(accountInfo);
+    } catch (error) {
+      console.error(error);
     }
 
-    return result;
+    return accountInfo;
+}
+
+exports.getTransactionInfo = async(id) =>{
+
+    let accountIDQuery = `SELECT account_no FROM accounts WHERE customer_id = '${id}';`;
+    var [accountID, _] = await connection.execute(accountIDQuery);
+
+    if(accountID.length > 0){
+        let transactionQuery = `SELECT * FROM transactions WHERE account_no = '${accountID[0]?.account_no}';`;
+
+        try {
+          var [transactionInfo, _] = await connection.execute(transactionQuery);
+          console.log(transactionInfo);
+        } catch (error) {
+          console.error(error);
+        }
+    }
+    
+    return transactionInfo;
 }
 
 exports.getAllUsers = async () => {
@@ -28,16 +47,16 @@ exports.getAllUsers = async () => {
 
 };
 
-exports.addAdmin = async (name) => {
-    let sql = `INSERT INTO admin VALUES('${name}')`;
+exports.getUserCount = async (month, year) => {
+     try {
+       let countQuery = `SELECT count(*) AS count, (week(created_at) - week('${year}-${month}-01') + 1) AS week_no 
+       FROM accounts WHERE created_at <= '${year}-${month}-31' AND created_at >= '${year}-${month}-01'
+       GROUP BY week_no;`;
+       const [count, _] = await connection.execute(countQuery);
 
-    try {
-        var [result, _] = await connection.execute(sql);
-        console.log("This is other variable: ", _);
-    }
-    catch (error) {
-        console.error(error);
-    }
-
-    return result;
+       return count;
+     } catch (error) {
+       console.error(error);
+       return false;
+     }
 }
