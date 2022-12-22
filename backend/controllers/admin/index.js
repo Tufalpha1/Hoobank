@@ -14,6 +14,20 @@ exports.getAllAdmins = async() =>{
     return result;
 }
 
+exports.getAllUsers = async () => {
+    try {
+        let userQuery = `SELECT * FROM customers`;
+        const [users, _] = await connection.execute(userQuery);
+
+        return users;
+
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+
+};
+
 exports.addAdmin = async (name) => {
     let sql = `INSERT INTO admin VALUES('${name}')`;
 
