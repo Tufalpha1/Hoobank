@@ -61,6 +61,7 @@ router.post("/add-user", async(req, res, next)=>{
   res.send({ success: false })
 })
 
+//come back to this for sessions
 router.get("/check-session", (req, res, next) => {
   if (req.session.user) {
     res.send({ session: true, user: req.session.user });
