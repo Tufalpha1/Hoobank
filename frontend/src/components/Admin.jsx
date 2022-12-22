@@ -8,42 +8,95 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { ActionIcon, Table, Menu } from '@mantine/core';
+import { ActionIcon, Table, Menu, Modal } from '@mantine/core';
 import useGetAllUsers from "../../hooks/user/use-get-all-users";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useRef } from "react";
+import useGetAccountInfo from "../../hooks/user/use-get-account";
+import useGetUserTransactions from '../../hooks/user/use-get-user-transactions';
+import { useEffect } from "react";
+import { useState } from "react";
+import useGetUserCount from "../../hooks/user/use-get-user-count";
+
 
 const Admin = () => {
 
-  const {data: users, isLoading, isError} = useGetAllUsers();
-  // const {data: transaction, isLoading: transactionLoading, isError: transactionError} = getTransactions();
+  axios.get("http://localhost:3000/users/check-session").then((response)=>console.log(response)).catch((err)=>console.error(err))
+
+  const { data: users, isLoading, isError } = useGetAllUsers();
+  
 
 
-  console.log(users)
+
+  const [id, setId] = useState(0);
+  const [transactionId, setTransactionId] = useState(0);
+
+  const [accountInfoModal, setAccountInfoModal] = useState(false);
+  const [transactionModal, setTransactionModal] = useState(false);
+
+  const {
+    data: account,
+    isLoading: accountLoading,
+    isError: accountError,
+  } = useGetAccountInfo(id);
+  const {
+    data: transactions,
+    isLoading: transactionsLoading,
+    isError: transactionsError,
+  } = useGetUserTransactions(transactionId);
+
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+  const {
+    data: count,
+    isLoading: countLoading,
+    isError: countError,
+  } = useGetUserCount(month, year);
+
+  console.log(count?.count);
+
+  const week1 = count?.count.filter((week)=>week.week_no === 1)
+  console.log("week1 ", week1)
+  const week2 = count?.count.filter((week)=>week.week_no === 2)
+  const week3 = count?.count.filter((week) => week.week_no === 3);
+  const week4 = count?.count.filter((week)=>week.week_no === 4)
+  console.log("week4 ", week4)
+  const week5 = count?.count.filter((week) => week.week_no === 5);
+
+  const one = week1 != null ? week1[0]?.count : 0;
+  const two = week2 != null ? week2[0]?.count : 0;
+  const three = week3 != null ? week3[0]?.count : 0;
+  const four = week4 != null ? week4[0]?.count : 0;
+  const five = week5 != null ? week5[0]?.count : 0;
 
   const data = [
     {
       name: "Week 1",
-      users: 40,
+      users: one
     },
     {
       name: "Week 2",
-      users: 30,
+      users: two
     },
     {
       name: "Week 3",
-      users: 15,
+      users: three
     },
     {
       name: "Week 4",
-      users: 35,
+      users: four
+    },
+    {
+      name: "Extra days",
+      users: five
     },
   ];
   return (
-    <div className="grid grid-cols-2 mt-20 justify-center items-center p-3 ">
-      <div className="flex flex-col gap-3 col-span-1">
+    <div className="grid grid-cols-2 mt-20 justify-center items-center p-3  ">
+      <div className="flex flex-col gap-3 col-span-2 md:col-span-1">
         <h2 className="text-2xl font-bold text-center">Customer Analysis</h2>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart
@@ -62,6 +115,7 @@ const Admin = () => {
             <YAxis />
             <Tooltip />
             <Area
+              connectNulls
               type="monotone"
               dataKey="users"
               stroke="#00fcff"
@@ -70,7 +124,7 @@ const Admin = () => {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div className="col-span-1 flex flex-col  gap-20 items-center">
+      <div className=" flex flex-col  gap-20 items-center col-span-2 md:col-span-1">
         <div>
           <h2 className="text-2xl font-bold text-center">
             Customer satisfaction rate
@@ -109,8 +163,7 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody>
-           {
-            users?.users?.map((user)=>{
+            {users?.users?.map((user) => {
               return (
                 <tr>
                   <td>{user.ID}</td>
@@ -127,33 +180,86 @@ const Admin = () => {
                       </Menu.Target>
 
                       <Menu.Dropdown>
-                        <Menu.Label>Change meeting state</Menu.Label>
-                        <Menu.Item onClick={() => {
-                          meeting.action = "held";
-                          setStatusModal(meeting)
-                        }}>
+                        <Menu.Label>customer information</Menu.Label>
+                        <Menu.Item
+                          onClick={() => {
+                            setId(user.ID);
+                            setAccountInfoModal(account);
+                          }}
+                        >
                           show account information
                         </Menu.Item>
-                        <Menu.Item onClick={() => {
-                          useQuery(["all-users"], async () => {
-                            const res = await axios.get(`http://localhost:3000/api/users/transactions`);
-                            console.log(res)
-
-                          })
-                        }}>
+                        <Menu.Item
+                          onClick={() => {
+                            setTransactionId(user.ID);
+                            setTransactionModal(transactions);
+                          }}
+                        >
                           show all transactions
                         </Menu.Item>
                       </Menu.Dropdown>
-
                     </Menu>
                   </td>
                 </tr>
-              )
-            })
-           }
+              );
+            })}
           </tbody>
         </Table>
       </div>
+      <Modal
+        opened={accountInfoModal}
+        onClose={() => setAccountInfoModal(false)}
+        position="center"
+      >
+        <div>
+          <Table captionSide="top">
+            <caption className="font-bold">Account Info:</caption>
+            <tr>
+              <th>Account number:</th>
+              <td>{account?.account[0]?.account_no}</td>
+            </tr>
+            <tr>
+              <th>Account status:</th>
+              <td>{account?.account[0]?.account_status}</td>
+            </tr>
+            <tr>
+              <th>Account type:</th>
+              <td>{account?.account[0]?.account_type}</td>
+            </tr>
+            <tr>
+              <th>Time of creation:</th>
+              <td>
+                {new Date(account?.account[0]?.created_at).toDateString()}
+              </td>
+            </tr>
+          </Table>
+        </div>
+      </Modal>
+      <Modal
+        opened={transactionModal}
+        onClose={() => setTransactionModal(false)}
+        position="center"
+      >
+        <div>
+          <Table captionSide="top">
+            <caption className="font-bold">Transaction Info:</caption>
+            <thead>
+              <th>Transaction type </th>
+              <th>Time</th>
+            </thead>
+            <tbody>
+              {transactions?.transactions?.map((transaction) => {
+                return (
+                  <tr>
+                    <td>{transaction.transaction_type}</td>
+                    <td>{transaction.time_stamp}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
+      </Modal>
     </div>
   );
 };

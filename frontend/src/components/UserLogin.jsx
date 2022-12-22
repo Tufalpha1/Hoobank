@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { loginSchema } from "../../schemas/loginSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { clsx } from "@mantine/core";
+import clsx from "clsx";
 import useLoginUserMutation from "../../hooks/user/use-login-user";
 import Cookies from "js-cookie"
 
@@ -64,7 +64,7 @@ const UserLogin = () => {
           </div>
           <div className="relative">
             <input
-              type="text"
+              type="password"
               name=""
               id=""
               placeholder="Password..."

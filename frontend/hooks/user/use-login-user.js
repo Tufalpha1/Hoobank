@@ -5,7 +5,7 @@ import axios from "axios";
 export default function useLoginUserMutation() {
     return useMutation(
         async ({ email, password }) => {
-            return await axios.post("http://local.host:3000/api/users/login-user", {
+            return await axios.post("http://localhost:3000/api/users/login-user", {
                 email, password
             });
         },

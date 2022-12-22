@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { signupSchema } from "../../schemas/signupSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { clsx } from "@mantine/core";
+import { NativeSelect } from "@mantine/core";
+import clsx from 'clsx';
 import axios from 'axios';
 import useAddUserMutation from '../../hooks/user/use-add-user';
 
@@ -40,29 +41,35 @@ const UserSignup = () => {
           <h1 className="text-xl lg:text-2xl font-bold font-Hack">Signup</h1>
         </div>
 
-        <form onSubmit={handleSubmit(onSignup)} className="gap-2 form-control w-full">
+        <form
+          onSubmit={handleSubmit(onSignup)}
+          className="gap-2 form-control w-full"
+        >
           <div className="relative">
             <input
               type="text"
               name=""
               id=""
               placeholder="Email..."
-              className={clsx("input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary", errors?.email && "border-error focus:outline-error")}
+              className={clsx(
+                "input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary",
+                errors?.email && "border-error focus:outline-error"
+              )}
               {...register("email")}
             />
-
           </div>
           <div className="relative">
             <input
-              type="text"
+              type="password"
               name=""
               id=""
               placeholder="Password..."
-              className={clsx("input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary", errors?.password && "border-error focus:outline-error")}
-
+              className={clsx(
+                "input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary",
+                errors?.password && "border-error focus:outline-error"
+              )}
               {...register("password")}
             />
-
           </div>
           <div className="relative">
             <input
@@ -70,11 +77,12 @@ const UserSignup = () => {
               name=""
               id=""
               placeholder="Name..."
-              className={clsx("input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary", errors?.name && "border-error focus:outline-error")}
+              className={clsx(
+                "input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary",
+                errors?.name && "border-error focus:outline-error"
+              )}
               {...register("name")}
             />
-
-
           </div>
           <div className="relative">
             <textarea
@@ -82,7 +90,10 @@ const UserSignup = () => {
               name=""
               id=""
               placeholder="Address..."
-              className={clsx("input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary", errors?.address && "border-error focus:outline-error")}
+              className={clsx(
+                "input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary",
+                errors?.address && "border-error focus:outline-error"
+              )}
               {...register("address")}
             />
           </div>
@@ -92,11 +103,27 @@ const UserSignup = () => {
               name=""
               id=""
               placeholder="Phone #..."
-              className={clsx("input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary", errors?.phone && "border-error focus:outline-error")}
+              className={clsx(
+                "input input-primary rounded-md input-md xl:input-lg placeholder:italic placeholder:pl-1 indent-5 w-full border-primary focus:outline-primary",
+                errors?.phone && "border-error focus:outline-error"
+              )}
               {...register("phone")}
             />
-
           </div>
+          <NativeSelect
+            name=""
+            id=""
+            {...register("branch")}
+            data={["paris", "london", "new york"]}
+            label="select your branch"
+          ></NativeSelect>
+          <NativeSelect
+            name=""
+            id=""
+            {...register("type")}
+            data={["current", "savings"]}
+            label="select your account type"
+          ></NativeSelect>
           <div className="text-center text-white">
             <input
               type="submit"
@@ -106,25 +133,21 @@ const UserSignup = () => {
               className="w-full rounded-xl btn btn-primary bg-primary border-primary hover:bg-secondary hover:border-primary"
             />
           </div>
-          <select name="" id=""
-            {...register("branch")}>
-            <option value="">select branch</option>
-            <option value="newyork">New York</option>
-            <option value="london">London</option>
-            <option value="paris">Paris</option>
-          </select>
         </form>
       </div>
       <div className="px-2 sm:p-0">
         <span className="text-gray-500">
           Already have an account?{" "}
-          <Link to="/login" className="font-bold link link-primary text-primary hover:text-secondary">
+          <Link
+            to="/login"
+            className="font-bold link link-primary text-primary hover:text-secondary"
+          >
             Login
           </Link>
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 export default UserSignup
