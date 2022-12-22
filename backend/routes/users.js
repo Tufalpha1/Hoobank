@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var sql = require("mysql2")
+var sql = require("mysql2");
+const { getAllUsers } = require('../controllers/admin');
 const {addUser, loginUser} = require("../controllers/user/index");
 
 
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', async(req, res, next) => {
+  const users = await getAllUsers();
+  res.send({users: users});
 });
 
 router.get("/add-user", (req, res,next)=>{

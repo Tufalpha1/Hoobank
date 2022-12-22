@@ -1,5 +1,7 @@
 const connection = require("../../database/connection");
 
+
+
 exports.addUser = async (email, password, name, address, phone, city) => {
   try {
     let getBranchQuery = `SELECT ID FROM branch WHERE city = '${city}'`;
