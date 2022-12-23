@@ -12,23 +12,22 @@ import { ActionIcon, Table, Menu, Modal } from '@mantine/core';
 import useGetAllUsers from "../../hooks/user/use-get-all-users";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { useRef } from "react";
 import useGetAccountInfo from "../../hooks/user/use-get-account";
 import useGetUserTransactions from '../../hooks/user/use-get-user-transactions';
-import { useEffect } from "react";
 import { useState } from "react";
 import useGetUserCount from "../../hooks/user/use-get-user-count";
 
+const Admin = ({session}) => {
 
-const Admin = () => {
+  if(!session?.session){
+    window.location.replace("http://localhost:5173/login")
+  }
 
-  axios.get("http://localhost:3000/users/check-session").then((response)=>console.log(response)).catch((err)=>console.error(err))
 
-  const { data: users, isLoading, isError } = useGetAllUsers();
+  // const { data: users, isLoading, isError } = useGetAllUsers();
   
 
+  console.log("Session on dashboard: ", session);
 
 
   const [id, setId] = useState(0);
@@ -37,40 +36,42 @@ const Admin = () => {
   const [accountInfoModal, setAccountInfoModal] = useState(false);
   const [transactionModal, setTransactionModal] = useState(false);
 
-  const {
-    data: account,
-    isLoading: accountLoading,
-    isError: accountError,
-  } = useGetAccountInfo(id);
-  const {
-    data: transactions,
-    isLoading: transactionsLoading,
-    isError: transactionsError,
-  } = useGetUserTransactions(transactionId);
+  // const {
+  //   data: account,
+  //   isLoading: accountLoading,
+  //   isError: accountError,
+  // } = useGetAccountInfo(id);
+  // const {
+  //   data: transactions,
+  //   isLoading: transactionsLoading,
+  //   isError: transactionsError,
+  // } = useGetUserTransactions(transactionId);
 
-  const month = new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
-  const {
-    data: count,
-    isLoading: countLoading,
-    isError: countError,
-  } = useGetUserCount(month, year);
+  // const month = new Date().getMonth() + 1;
+  // const year = new Date().getFullYear();
+  // const {
+  //   data: count,
+  //   isLoading: countLoading,
+  //   isError: countError,
+  // } = useGetUserCount(month, year);
 
-  console.log(count?.count);
+  // console.log(count?.count);
 
-  const week1 = count?.count.filter((week)=>week.week_no === 1)
-  console.log("week1 ", week1)
-  const week2 = count?.count.filter((week)=>week.week_no === 2)
-  const week3 = count?.count.filter((week) => week.week_no === 3);
-  const week4 = count?.count.filter((week)=>week.week_no === 4)
-  console.log("week4 ", week4)
-  const week5 = count?.count.filter((week) => week.week_no === 5);
+  // const week1 = count?.count.filter((week)=>week.week_no === 1)
+  // console.log("week1 ", week1)
+  // const week2 = count?.count.filter((week)=>week.week_no === 2)
+  // const week3 = count?.count.filter((week) => week.week_no === 3);
+  // const week4 = count?.count.filter((week)=>week.week_no === 4)
+  // console.log("week4 ", week4)
+  // const week5 = count?.count.filter((week) => week.week_no === 5);
 
-  const one = week1 != null ? week1[0]?.count : 0;
-  const two = week2 != null ? week2[0]?.count : 0;
-  const three = week3 != null ? week3[0]?.count : 0;
-  const four = week4 != null ? week4[0]?.count : 0;
-  const five = week5 != null ? week5[0]?.count : 0;
+  // const one = week1 != null ? week1[0]?.count : 0;
+  // const two = week2 != null ? week2[0]?.count : 0;
+  // const three = week3 != null ? week3[0]?.count : 0;
+  // const four = week4 != null ? week4[0]?.count : 0;
+  // const five = week5 != null ? week5[0]?.count : 0;
+
+  const one = 1, two = 2, three = 3, four = 4, five = 5;
 
   const data = [
     {
@@ -95,7 +96,8 @@ const Admin = () => {
     },
   ];
   return (
-    <div className="grid grid-cols-2 mt-20 justify-center items-center p-3  ">
+    <>
+   {session?.session && <div className="grid grid-cols-2 mt-20 justify-center items-center p-3  ">
       <div className="flex flex-col gap-3 col-span-2 md:col-span-1">
         <h2 className="text-2xl font-bold text-center">Customer Analysis</h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -162,7 +164,7 @@ const Admin = () => {
               <th></th>
             </tr>
           </thead>
-          <tbody>
+          {/* <tbody>
             {users?.users?.map((user) => {
               return (
                 <tr>
@@ -182,18 +184,18 @@ const Admin = () => {
                       <Menu.Dropdown>
                         <Menu.Label>customer information</Menu.Label>
                         <Menu.Item
-                          onClick={() => {
-                            setId(user.ID);
-                            setAccountInfoModal(account);
-                          }}
+                          // onClick={() => {
+                          //   setId(user.ID);
+                          //   setAccountInfoModal(account);
+                          // }}
                         >
                           show account information
                         </Menu.Item>
                         <Menu.Item
-                          onClick={() => {
-                            setTransactionId(user.ID);
-                            setTransactionModal(transactions);
-                          }}
+                          // onClick={() => {
+                          //   setTransactionId(user.ID);
+                          //   setTransactionModal(transactions);
+                          // }}
                         >
                           show all transactions
                         </Menu.Item>
@@ -203,10 +205,10 @@ const Admin = () => {
                 </tr>
               );
             })}
-          </tbody>
+          </tbody> */}
         </Table>
       </div>
-      <Modal
+      {/* <Modal
         opened={accountInfoModal}
         onClose={() => setAccountInfoModal(false)}
         position="center"
@@ -234,8 +236,8 @@ const Admin = () => {
             </tr>
           </Table>
         </div>
-      </Modal>
-      <Modal
+      </Modal> */}
+      {/* <Modal
         opened={transactionModal}
         onClose={() => setTransactionModal(false)}
         position="center"
@@ -259,8 +261,9 @@ const Admin = () => {
             </tbody>
           </Table>
         </div>
-      </Modal>
-    </div>
+      </Modal> */}
+    </div>}
+    </>
   );
 };
 

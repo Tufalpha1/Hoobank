@@ -5,10 +5,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NativeSelect } from "@mantine/core";
 import clsx from 'clsx';
-import axios from 'axios';
+import {toast} from "react-hot-toast"
 import useAddUserMutation from '../../hooks/user/use-add-user';
 
-const UserSignup = () => {
+const UserSignup = ({session}) => {
+
+  if (localStorage.getItem("session")) {
+    window.location.replace("http://localhost:5173/")
+  }
+  
   const {
     register,
     formState: { errors },
@@ -27,9 +32,12 @@ const UserSignup = () => {
     }, {
       onSuccess: ()=>{
         console.log("User added")
+        window.location.replace("http://localhost:5173/login")
+        toast.success("User added successfully");
       },
       onError: () => {
         console.log("Error adding user")
+        toast.error("Error adding user");
       }
     })
   }

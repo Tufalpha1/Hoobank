@@ -15,18 +15,26 @@ import {
   Admin
 } from "./components";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import useGetSession from "../hooks/use-get-session";
+import GlobalToaster from "./components/GlobalToaster";
 
 
 const App = () => {
 
+  const {data: session, isLoading, isError} = useGetSession();
+
+  if(session?.session){
+    localStorage.setItem("session", session)
+  }
 
   return (
     <>
-      <Router>
+      {!isLoading && <Router>
+        <GlobalToaster/>
         <div className="bg-primary w-full overflow-hidden">
           <div className={`${styles.paddingX}  ${styles.flexCenter}`}>
             <div className={`${styles.boxWidth}`}>
-              <Navbar />
+              <Navbar session={session} />
             </div>
           </div>
         </div>
@@ -46,9 +54,9 @@ const App = () => {
                 </div>
               }
             />
-            <Route path="/login" element={<UserLogin />} />
+            <Route path="/login" element={<UserLogin session={session} />} />
 
-            <Route path="/signup" element={<UserSignup />} />
+            <Route path="/signup" element={<UserSignup session={session} />} />
 
             <Route
               path="/features"
@@ -92,10 +100,10 @@ const App = () => {
                 </div>
               }
             />
-            <Route path="/dashboard" element={<Admin />} />
+            <Route path="/dashboard" element={<Admin session={session} />} />
           </Routes>
         </div>
-      </Router>
+      </Router>}
     </>
   );
 };

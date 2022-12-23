@@ -5,9 +5,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import useLoginUserMutation from "../../hooks/user/use-login-user";
-import Cookies from "js-cookie"
+import {toast} from "react-hot-toast";
 
-const UserLogin = () => {
+const UserLogin = ({session}) => {
+
+  if (localStorage.getItem("session")) {
+    window.location.replace("http://localhost:5173/")
+  }
+
   const { mutate: loginUser, isLoading, isError } = useLoginUserMutation();
 
   const {
@@ -25,17 +30,17 @@ const UserLogin = () => {
       {
         onSuccess: async (res, variables, context) => {
           console.log("User logged in");
+          toast.success("Logged in successfully");
+          window.location.replace("http://localhost:5173/")
         },
         onError: (err, variables, context) => {
+          toast.success("An error occured, please try again later");
           console.log(err);
         },
       }
     );
-
-    console.log(result)
   };
 
-  console.log("cookie value is: ", Cookies.get("session-id"))
 
   return (
     <div className="h-screen w-full flex flex-col px-4 justify-center items-center m-auto bg-bglayer bg-no-repeat bg-cover gap-7">

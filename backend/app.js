@@ -23,14 +23,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//session thing
-// app.use(session({
-//   name: "session-id",
-//   secret: process.env.COOKIE_SECRET,
-//   saveUninitialized: false,
-//   resave: false,
-//   store: new FileStore({ path: "./sessions/", retries: 0 })
-// }));
+// session thing
+app.use(session({
+  name: "session-id",
+  secret: "session-secret",
+  saveUninitialized: false,
+  resave: false,
+  store: new FileStore({ path: "./sessions/", retries: 0 })
+}));
 
 const corsOptions = {
   origin: 'http://local.host:3000',  
@@ -39,10 +39,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-
+app.get("/session", (req, res, next)=>{
+  if(req.session.user){
+    return res.send({session: true, user: req.session.user});
+  }
+  return res.send({ session: false });
+})
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use("/api/admin", adminRouter)
+
+app.get("/logout", (req, res, next)=>{
+  req.session.destroy();
+})
 
 
 app.all("*", (req, res, next)=>{
