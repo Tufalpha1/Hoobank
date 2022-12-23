@@ -2,13 +2,23 @@ import {useState} from 'react'
 import {close ,logo, menu} from '../assets'
 import {navLinks} from '../constants'
 import {Link} from "react-router-dom"
+import axios from 'axios'
+import {toast} from "react-hot-toast"
+import { faCropSimple } from '@fortawesome/free-solid-svg-icons'
 
-const Navbar = () => {
+const Navbar = ({session}) => {
 
   const [active, setActive] = useState("Home");
   const [toggle, setToggle] = useState(false);
-
-  const state = "loggedin";
+  
+  const handleLogout = ()=>{
+    console.log("logout function runnning");
+    axios.get("http://localhost:3000/logout").then((res)=>console.log(res)).catch((err)=>console.log(err))
+    
+    toast.success("logged out successfully");
+    localStorage.removeItem("session")
+    window.location.replace("http://localhost:5173/login")
+  }
 
   return (
     <div>
@@ -16,18 +26,21 @@ const Navbar = () => {
       <img src={logo} alt="hoobank" className="w-[124px] h-[32px]" />
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
-      {navLinks.map((nav, index) => (
-          <li
+      {navLinks.map((nav, index) => {
+        if(session?.session === false && (nav.id === "dashboard" || nav.id === "logout")) return false;
+        if (session?.session === true && (nav.id === "login" || nav.id === "signup") ) return false;
+          return <li
             key={nav.id}
             className={`font-poppins font-normal cursor-pointer text-[16px] ${
               active === nav.title ? "text-white" : "text-dimWhite"
             } ${index === navLinks.length - 1 ? "mr-0" : "mr-10"}`}
           >
-            <Link to={`${nav.id}`} onClick={()=>{
+            <Link to={nav.id === "logout"? "" : `${nav.id}`} onClick={nav.id === "logout" ? handleLogout : () => {
               setActive(nav.title)
+              console.log("other function running");
             }}>{nav.title}</Link>
           </li>
-        ))}
+        })}
       </ul>
       
       <div className="sm:hidden flex flex-1 justify-end items-center">

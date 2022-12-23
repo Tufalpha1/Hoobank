@@ -29,6 +29,10 @@ export const navLinks = [
     id: "dashboard",
     title: "Dashboard",
   },
+  {
+    id: "logout",
+    title: "Logout",
+  },
 ];
 
 export const features = [

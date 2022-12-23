@@ -40,7 +40,7 @@ exports.addUser = async (email, password, name, address, phone, city, type) => {
 exports.loginUser = async (email, password) => {
   try {
    
-    let loginQuery = `SELECT isAdmin FROM login WHERE email = '${email}' AND password = '${password}'`;
+    let loginQuery = `SELECT * FROM login WHERE email = '${email}' AND password = '${password}'`;
 
     var [exists, _] = await connection.execute(loginQuery);
 
