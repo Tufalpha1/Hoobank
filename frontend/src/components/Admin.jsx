@@ -24,7 +24,7 @@ const Admin = ({session}) => {
   }
 
 
-  // const { data: users, isLoading, isError } = useGetAllUsers();
+  const { data: users, isLoading, isError } = useGetAllUsers();
   
 
   console.log("Session on dashboard: ", session);
@@ -36,42 +36,41 @@ const Admin = ({session}) => {
   const [accountInfoModal, setAccountInfoModal] = useState(false);
   const [transactionModal, setTransactionModal] = useState(false);
 
-  // const {
-  //   data: account,
-  //   isLoading: accountLoading,
-  //   isError: accountError,
-  // } = useGetAccountInfo(id);
-  // const {
-  //   data: transactions,
-  //   isLoading: transactionsLoading,
-  //   isError: transactionsError,
-  // } = useGetUserTransactions(transactionId);
+  const {
+    data: account,
+    isLoading: accountLoading,
+    isError: accountError,
+  } = useGetAccountInfo(id);
+  const {
+    data: transactions,
+    isLoading: transactionsLoading,
+    isError: transactionsError,
+  } = useGetUserTransactions(transactionId);
 
-  // const month = new Date().getMonth() + 1;
-  // const year = new Date().getFullYear();
-  // const {
-  //   data: count,
-  //   isLoading: countLoading,
-  //   isError: countError,
-  // } = useGetUserCount(month, year);
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+  const {
+    data: count,
+    isLoading: countLoading,
+    isError: countError,
+  } = useGetUserCount(month, year);
 
-  // console.log(count?.count);
+  console.log(count?.count);
 
-  // const week1 = count?.count.filter((week)=>week.week_no === 1)
-  // console.log("week1 ", week1)
-  // const week2 = count?.count.filter((week)=>week.week_no === 2)
-  // const week3 = count?.count.filter((week) => week.week_no === 3);
-  // const week4 = count?.count.filter((week)=>week.week_no === 4)
-  // console.log("week4 ", week4)
-  // const week5 = count?.count.filter((week) => week.week_no === 5);
+  const week1 = count?.count.filter((week)=>week.week_no === 1)
+  console.log("week1 ", week1)
+  const week2 = count?.count.filter((week)=>week.week_no === 2)
+  const week3 = count?.count.filter((week) => week.week_no === 3);
+  const week4 = count?.count.filter((week)=>week.week_no === 4)
+  console.log("week4 ", week4)
+  const week5 = count?.count.filter((week) => week.week_no === 5);
 
-  // const one = week1 != null ? week1[0]?.count : 0;
-  // const two = week2 != null ? week2[0]?.count : 0;
-  // const three = week3 != null ? week3[0]?.count : 0;
-  // const four = week4 != null ? week4[0]?.count : 0;
-  // const five = week5 != null ? week5[0]?.count : 0;
+  const one = week1 != null ? week1[0]?.count : 0;
+  const two = week2 != null ? week2[0]?.count : 0;
+  const three = week3 != null ? week3[0]?.count : 0;
+  const four = week4 != null ? week4[0]?.count : 0;
+  const five = week5 != null ? week5[0]?.count : 0;
 
-  const one = 1, two = 2, three = 3, four = 4, five = 5;
 
   const data = [
     {
@@ -152,7 +151,6 @@ const Admin = ({session}) => {
         </div>
       </div>
       <div className="mt-10 col-span-2 p-3">
-        {/* comeback to this for database call */}
         <Table highlightOnHover withBorder withColumnBorders>
           <thead>
             <tr>
@@ -164,7 +162,7 @@ const Admin = ({session}) => {
               <th></th>
             </tr>
           </thead>
-          {/* <tbody>
+          <tbody>
             {users?.users?.map((user) => {
               return (
                 <tr>
@@ -184,18 +182,18 @@ const Admin = ({session}) => {
                       <Menu.Dropdown>
                         <Menu.Label>customer information</Menu.Label>
                         <Menu.Item
-                          // onClick={() => {
-                          //   setId(user.ID);
-                          //   setAccountInfoModal(account);
-                          // }}
+                          onClick={() => {
+                            setId(user.ID);
+                            setAccountInfoModal(account);
+                          }}
                         >
                           show account information
                         </Menu.Item>
                         <Menu.Item
-                          // onClick={() => {
-                          //   setTransactionId(user.ID);
-                          //   setTransactionModal(transactions);
-                          // }}
+                          onClick={() => {
+                            setTransactionId(user.ID);
+                            setTransactionModal(transactions);
+                          }}
                         >
                           show all transactions
                         </Menu.Item>
@@ -205,10 +203,10 @@ const Admin = ({session}) => {
                 </tr>
               );
             })}
-          </tbody> */}
+          </tbody> 
         </Table>
       </div>
-      {/* <Modal
+      <Modal
         opened={accountInfoModal}
         onClose={() => setAccountInfoModal(false)}
         position="center"
@@ -236,8 +234,8 @@ const Admin = ({session}) => {
             </tr>
           </Table>
         </div>
-      </Modal> */}
-      {/* <Modal
+      </Modal> 
+      <Modal
         opened={transactionModal}
         onClose={() => setTransactionModal(false)}
         position="center"
@@ -261,7 +259,7 @@ const Admin = ({session}) => {
             </tbody>
           </Table>
         </div>
-      </Modal> */}
+      </Modal>
     </div>}
     </>
   );
