@@ -22,6 +22,10 @@ const Admin = ({session}) => {
   if(!session?.session){
     window.location.replace("http://localhost:5173/login")
   }
+  if (!session?.user[0].isAdmin){
+    window.location.replace("http://localhost:5173/")
+    return <div></div>
+  }
 
 
   const { data: users, isLoading, isError } = useGetAllUsers();
@@ -203,7 +207,7 @@ const Admin = ({session}) => {
                 </tr>
               );
             })}
-          </tbody> 
+          </tbody>
         </Table>
       </div>
       <Modal
@@ -234,7 +238,8 @@ const Admin = ({session}) => {
             </tr>
           </Table>
         </div>
-      </Modal> 
+      </Modal>
+
       <Modal
         opened={transactionModal}
         onClose={() => setTransactionModal(false)}

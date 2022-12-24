@@ -51,6 +51,7 @@ app.use("/api/admin", adminRouter)
 
 app.get("/logout", (req, res, next)=>{
   req.session.destroy();
+  res.status(200).send({success: true})
 })
 
 
