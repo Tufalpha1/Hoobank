@@ -34,7 +34,7 @@ const UserLogin = ({session}) => {
           window.location.replace("http://localhost:5173/")
         },
         onError: (err, variables, context) => {
-          toast.success("An error occured, please try again later");
+          toast.error("An error occured, please try again later");
           console.log(err);
         },
       }

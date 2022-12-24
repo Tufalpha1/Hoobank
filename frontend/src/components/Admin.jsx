@@ -59,7 +59,7 @@ const Admin = ({session}) => {
     isError: countError,
   } = useGetUserCount(month, year);
 
-  // console.log(count?.count);
+  console.log(count?.count);
 
   const week1 = count?.count.filter((week)=>week.week_no === 1)
   console.log("week1 ", week1)
@@ -155,7 +155,6 @@ const Admin = ({session}) => {
         </div>
       </div>
       <div className="mt-10 col-span-2 p-3">
-        {/* comeback to this for database call */}
         <Table highlightOnHover withBorder withColumnBorders>
           <thead>
             <tr>
@@ -240,6 +239,7 @@ const Admin = ({session}) => {
           </Table>
         </div>
       </Modal>
+
       <Modal
         opened={transactionModal}
         onClose={() => setTransactionModal(false)}
