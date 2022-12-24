@@ -24,6 +24,7 @@ const App = () => {
   const {data: session, isLoading, isError} = useGetSession();
 
   if(session?.session){
+    console.log("res in app: ", session?.session)
     localStorage.setItem("session", session)
   }
 

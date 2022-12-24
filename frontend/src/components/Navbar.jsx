@@ -4,7 +4,6 @@ import {navLinks} from '../constants'
 import {Link} from "react-router-dom"
 import axios from 'axios'
 import {toast} from "react-hot-toast"
-import { faCropSimple } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = ({session}) => {
 
@@ -13,10 +12,11 @@ const Navbar = ({session}) => {
   
   const handleLogout = ()=>{
     console.log("logout function runnning");
-    axios.get("http://localhost:3000/logout").then((res)=>console.log(res)).catch((err)=>console.log(err))
-    
+    axios.get("http://localhost:3000/logout").then((res)=>console.log("res", res)).catch((err)=>console.log(err))
     toast.success("logged out successfully");
+    console.log("Code reaching here")
     localStorage.removeItem("session")
+    console.log("Code reaching here2")
     window.location.replace("http://localhost:5173/login")
   }
 
@@ -29,6 +29,7 @@ const Navbar = ({session}) => {
       {navLinks.map((nav, index) => {
         if(session?.session === false && (nav.id === "dashboard" || nav.id === "logout")) return false;
         if (session?.session === true && (nav.id === "login" || nav.id === "signup") ) return false;
+        if (session?.session === true && !session?.user[0].isAdmin && nav.id === "dashboard") return false;
           return <li
             key={nav.id}
             className={`font-poppins font-normal cursor-pointer text-[16px] ${
