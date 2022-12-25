@@ -62,11 +62,9 @@ const Admin = ({session}) => {
   console.log(count?.count);
 
   const week1 = count?.count.filter((week)=>week.week_no === 1)
-  console.log("week1 ", week1)
   const week2 = count?.count.filter((week)=>week.week_no === 2)
   const week3 = count?.count.filter((week) => week.week_no === 3);
   const week4 = count?.count.filter((week)=>week.week_no === 4)
-  console.log("week4 ", week4)
   const week5 = count?.count.filter((week) => week.week_no === 5);
 
   const one = week1 != null ? week1[0]?.count : 0;

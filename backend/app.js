@@ -10,6 +10,7 @@ const adminRouter = require("./routes/admin")
 const session = require("express-session")
 const cors = require("cors")
 const FileStore = require("session-file-store")(session);
+require("dotenv").configure()
 
 var app = express();
 
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // session thing
 app.use(session({
   name: "session-id",
-  secret: "session-secret",
+  secret: process.env.SESSION_SECRET_KEY,
   saveUninitialized: false,
   resave: false,
   store: new FileStore({ path: "./sessions/", retries: 0 })

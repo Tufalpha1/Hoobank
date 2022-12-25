@@ -44,13 +44,16 @@ exports.loginUser = async (email, password) => {
 
     var [exists, _] = await connection.execute(loginQuery);
 
-    if (exists) {
+    console.log("User: ", exists);
+    // prints empty array which is still considered data
+    // so the if condition evaluates to true
+
+    if (exists.length > 0) {
      return exists;
     }
+    return false;
   } catch (error) {
     console.error(error);
     return false;
   }
-
-  return true;
 };
