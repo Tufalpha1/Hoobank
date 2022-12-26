@@ -10,7 +10,7 @@ const adminRouter = require("./routes/admin")
 const session = require("express-session")
 const cors = require("cors")
 const FileStore = require("session-file-store")(session);
-require("dotenv").configure()
+require("dotenv").config()
 
 var app = express();
 
